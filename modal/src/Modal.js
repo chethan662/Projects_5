@@ -1,27 +1,34 @@
-
-import React from "react";
+import React, { useState } from "react";
 import "./Modal.css";
 
 function Modal({ show, handleClose, handleSubmit, formData, setFormData }) {
-    // const modalRef = useRef(null);
-  
-    // const handleFormSubmit = (event) => {
-    //   handleSubmit(event);
-    //   // Close the modal (optional, depends on your use case)
-    //   handleClose();
-    // };
+  const initialFormData = {
+    username: "",
+    email: "",
+    phone: "",
+    dob: "",
+  };
+
+  const [localFormData, setLocalFormData] = useState(initialFormData);
+
   return (
-    <div className={show ? "display-block" : "model-display-none"}>
-      <div className="modal-content">
+    <div className={show ? "modal display-block" : "modal display-none"} onClick={handleClose}>
+      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
         <h2>Fill Details</h2>
-        <form onSubmit={(e) => handleSubmit(e, setFormData)}>
+        <form
+          onSubmit={(e) => {
+            handleSubmit(e, localFormData, setLocalFormData);
+            // Reset the form data to initial state
+            setLocalFormData(initialFormData);
+          }}
+        >
           <label htmlFor="username">Username:</label>
           <input
             type="text"
             id="username"
             name="username"
-            value={formData.username}
-            onChange={(e) => setFormData({ ...formData, username: e.target.value })}
+            value={localFormData.username}
+            onChange={(e) => setLocalFormData({ ...localFormData, username: e.target.value })}
             required
           />
           <label htmlFor="email">Email Address:</label>
@@ -29,24 +36,24 @@ function Modal({ show, handleClose, handleSubmit, formData, setFormData }) {
             type="email"
             id="email"
             name="email"
-            value={formData.email}
-            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+            value={localFormData.email}
+            onChange={(e) => setLocalFormData({ ...localFormData, email: e.target.value })}
           />
           <label htmlFor="phone">Phone Number:</label>
           <input
             type="tel"
             id="phone"
             name="phone"
-            value={formData.phone}
-            onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+            value={localFormData.phone}
+            onChange={(e) => setLocalFormData({ ...localFormData, phone: e.target.value })}
           />
           <label htmlFor="dob">Date of Birth:</label>
           <input
             type="date"
             id="dob"
             name="dob"
-            value={formData.dob}
-            onChange={(e) => setFormData({ ...formData, dob: e.target.value })}
+            value={localFormData.dob}
+            onChange={(e) => setLocalFormData({ ...localFormData, dob: e.target.value })}
           />
           <button type="submit" className="submit-button">
             Submit
@@ -56,6 +63,6 @@ function Modal({ show, handleClose, handleSubmit, formData, setFormData }) {
       </div>
     </div>
   );
-  }
+}
 
 export default Modal;
